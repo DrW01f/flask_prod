@@ -3,13 +3,33 @@ from flask_sqlalchemy import SQLAlchemy
 from models import db, Parents, Students, Teachers
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'  # для работы через консоль?
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../../instance/mydatabase.db'
 db.init_app(app)
 
 
-@app.route('/')
+@app.route("/")
 def index():
     return render_template("base.html")
+
+
+@app.route("/data/")
+def data():
+    return "data"
+
+
+@app.route("/students/")
+def all_students():
+    students = Students.query.all()
+    context = {"students": students}
+    return render_template("students.html", **context)
+
+
+@app.route("/students/<studentname>")
+def student_by_students(studentname):
+    students = Students.query.filter(Students.student_name == studentname).all()
+    context = {"students": students}
+    return render_template("students.html", **context)
 
 
 @app.cli.command("init-db")
@@ -46,29 +66,7 @@ def del_student():
     print("Delete complete")
 
 
-
-
 if __name__ == '__main__':
     app.run(debug=True)
 
-
-# 42:00
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# 52:00
