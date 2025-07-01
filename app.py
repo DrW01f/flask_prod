@@ -1,11 +1,22 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
+from flask_wtf import FlaskForm
+from flask_wtf.csrf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
 from models import db, Parents, Students, Teachers
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydatabase.db'  # для работы через консоль?
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../../instance/mydatabase.db'
-db.init_app(app)
+app.config["SECRET_KEY"] = b'123456789'
+csrf = CSRFProtect(app)
+# db.init_app(app)
+
+"""
+для генерации ключа 
+import secrets
+secrets.token_hex()
+"""
+
 
 
 @app.route("/")
